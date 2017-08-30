@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/jnativehook-2.1.0.jar"/>
+	<classpathentry kind="lib" path="/home/tmc-testi/eclipse-workspace/exported_keyloggers.zip_expanded/jna-4.4.0.jar"/>
+	<classpathentry kind="lib" path="/home/tmc-testi/eclipse-workspace/exported_keyloggers.zip_expanded/jna-platform-4.4.0.jar"/>
+	<classpathentry kind="lib" path="/home/tmc-testi/eclipse-workspace/exported_keyloggers.zip_expanded/sqlite-jdbc-3.20.0.jar"/>
+	<classpathentry kind="lib" path="/home/tmc-testi/eclipse-workspace/exported_keyloggers.zip_expanded/commons-codec-1.9.jar"/>
+	<classpathentry kind="lib" path="/home/tmc-testi/eclipse-workspace/exported_keyloggers.zip_expanded/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="/home/tmc-testi/eclipse-workspace/exported_keyloggers.zip_expanded/gson-2.3.1.jar"/>
+	<classpathentry kind="lib" path="/home/tmc-testi/eclipse-workspace/exported_keyloggers.zip_expanded/httpclient-4.5.3.jar"/>
+	<classpathentry kind="lib" path="/home/tmc-testi/eclipse-workspace/exported_keyloggers.zip_expanded/httpcore-4.4.6.jar"/>
+	<classpathentry kind="lib" path="/home/tmc-testi/eclipse-workspace/exported_keyloggers.zip_expanded/lightcouch-0.1.8.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
