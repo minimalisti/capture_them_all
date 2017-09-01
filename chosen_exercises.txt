@@ -1,0 +1,16 @@
+Algoritmien MOOC - http://mooc.fi/courses/2015/algoritmit/
+
+Selvästi alakanttiin oleva aika-arvio on 10 minuuttia per tehtävä. Tarve olisi siis 6 tehtävälle, alkuun niitä jo olio-ohjelmointiMOOCista valittuja, jotka halutaan säilyttää.
+
+Viikko 1, tehtävä 3
+Viikko 1, tehtävä 5
+
+Viikko 2, tehtävä 3
+
+Viikko 4, tehtävä 2
+
+Viikko 6, tehtävä 2
+
+Viikko 9, tehtävä 2
+
+Bonus 1, tehtävä 1

@@ -1,0 +1,12 @@
+Collected data              Analysis
+---------------             ---------
+Video                       Facial expression (emotional categories as integer)
+
+Typing
+
+Mouse
+
+Survey data (per            Can the difficulty level reported by the user be infered from typing, mouse or other data
+exercise)
+
+Moodmetric 
