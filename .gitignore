@@ -2,6 +2,7 @@ couchdb.properties
 
 .classpath
 *.mkv
+*~
 
 .metadata
 bin/
