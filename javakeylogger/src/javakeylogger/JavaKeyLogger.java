@@ -79,12 +79,14 @@ class LetsCallCouch {
 }
 
 class ObjectForCouch {
+	int userID;
 	String eventData;
 	long timeStamp;
 	String activeWindow;
 	
 
 	public ObjectForCouch(String eData, long tStamp, String cOutput) {
+		userID = 2;
 		eventData = eData;
 		timeStamp = tStamp;
 		activeWindow = cOutput;
