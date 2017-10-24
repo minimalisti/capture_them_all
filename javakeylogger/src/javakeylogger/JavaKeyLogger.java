@@ -1,4 +1,3 @@
-package javakeylogger;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -11,6 +10,18 @@ import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 
 /**
  * A demonstration of how to use the JNativeHook library.
@@ -62,6 +73,74 @@ import org.jnativehook.mouse.NativeMouseWheelListener;
 import org.lightcouch.CouchDbClient;
 import org.lightcouch.Response;
 
+/* NOt using this fancy GUI at the moment...
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+ 
+class TMCGui extends JFrame implements ActionListener
+{
+	Container c;
+	String userName, realName;
+	Boolean validUser = false;
+	JLabel userlabel=new JLabel("TMC Username");
+	JLabel realnamelabel=new JLabel("Real Username");
+	JTextField fieldid=new JTextField();
+	JTextField fieldrealname=new JTextField();
+	JButton tmcguibtn=new JButton("Start");
+	
+	TMCGui(){
+		c=this.getContentPane();
+		c.setLayout(null);
+		//c.setBackground(Color.YELLOW);
+		userlabel.setBounds(10,10,150,30);
+		realnamelabel.setBounds(10,50,150,30);
+		fieldid.setBounds(120,10,140,30);
+		fieldrealname.setBounds(120,50,140,30);
+		tmcguibtn.setBounds(120,100,90,30);
+		c.add(fieldid);
+		c.add(fieldrealname);
+		c.add(realnamelabel);
+		c.add(userlabel);
+		c.add(tmcguibtn);
+		tmcguibtn.addActionListener(this);
+	}
+	
+	public Boolean isValidUser(){
+		return validUser;
+	}
+	
+	public String getUserName(){
+		return userName;
+	}
+	
+	public String getRealName(){
+		return realName;
+	}
+	
+	public void actionPerformed(ActionEvent e)
+	{
+		if(e.getSource()==tmcguibtn)
+		{
+			userName= fieldid.getText();
+			realName=fieldrealname.getText();
+			if(userName.equals("") && realName.equals("") )
+			{
+				JLabel success=new JLabel();
+				JLabel warning=new JLabel();
+				c.add(warning);
+				
+			}
+			else 
+			{
+				userName  = fieldid.getText();
+				realName  = fieldrealname.getText();
+				validUser = true;
+			}		
+		}		
+	}
+}*/
+
 class LetsCallCouch {
 	private CouchDbClient dbClient;
 
@@ -79,14 +158,15 @@ class LetsCallCouch {
 }
 
 class ObjectForCouch {
-	int userID;
+	String userID;
+	String realName;
 	String eventData;
 	long timeStamp;
 	String activeWindow;
-	
 
-	public ObjectForCouch(String eData, long tStamp, String cOutput) {
-		userID = 2;
+
+	public ObjectForCouch(String eData, long tStamp, String cOutput, String User) {
+		userID = User;
 		eventData = eData;
 		timeStamp = tStamp;
 		activeWindow = cOutput;
@@ -147,6 +227,8 @@ class TaskScheduling {
 public class JavaKeyLogger extends JFrame implements ActionListener, ItemListener, NativeKeyListener, NativeMouseInputListener, NativeMouseWheelListener, WindowListener {
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1541183202160543102L;
+	private String tmcUserName; 
+	
 
 	/** Menu Items */
 	private JMenu menuSubListeners;
@@ -165,9 +247,40 @@ public class JavaKeyLogger extends JFrame implements ActionListener, ItemListene
 
 	protected LetsCallCouch letsCallCouch;
 	
+	public String promptUserName(){
+		JFrame frame = new JFrame("TMC Experiment!!");
+	    String userId = JOptionPane.showInputDialog(frame, "TMC Id?");
+//	    if(userId==null){
+//	    	checkIfRealTest();
+//	    }
+	    return userId;
+	}
+	public String checkIfRealTest(){
+		Boolean realTest = false;
+		int option = JOptionPane.showConfirmDialog(null, "Real Experimental Test?", "Real TMC Experiment?", JOptionPane.YES_NO_OPTION);
+		if(option==0){
+			return promptUserName();
+		}else{
+			return null;		}
+	}
 
 	public JavaKeyLogger() {
 		// Setup the main window.
+		Boolean allPocessDone= false;
+		//TMCGui f=new TMCGui();
+		//f.setTitle("TMC Experiment");
+		//f.setVisible(true);
+		//f.setBounds(100,100,300,180);
+		//f.setLocationRelativeTo(null);
+		//f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);	
+		
+		String userId = checkIfRealTest();
+		if(userId == null){
+			tmcUserName = "Anonymous";
+		}else{
+			tmcUserName = userId;
+		}
+
 		setTitle("Key, mouse & windowlogging.");
 		setLayout(new BorderLayout());
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -423,14 +536,14 @@ public class JavaKeyLogger extends JFrame implements ActionListener, ItemListene
 		Date date= new Date();
 		long time = date.getTime();
 		Timestamp ts = new Timestamp(time);
-		long t = ts.getTime();
+		long t = ts.getTime()/1000L;
 
 		//txtEventInfo.append("\nTimestamp: "+ t + ",  "+ e.paramString() );
 
 		String cmdOutput = new Task().returnString();
 		//System.out.println(cmdOutput);
 
-		ObjectForCouch o4c = new ObjectForCouch(e.paramString(), t, cmdOutput);
+		ObjectForCouch o4c = new ObjectForCouch(e.paramString(), t, cmdOutput, tmcUserName);
 		letsCallCouch.dataToCouch(o4c);
 
 //		try {
