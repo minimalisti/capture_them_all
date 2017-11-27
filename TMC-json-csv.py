@@ -7,13 +7,15 @@ class tmcJsonParser:
 
 	def getValuesFromJSONRows(self, data):
 		string_vals = ','.join(data.values())
-		return string_vals[1:]
+		print(string_vals)
+		return string_vals
 
 	def __init__(self):
 		json_raw_data = ""
 		parsed_json = None
 		self.argumentParser()
 		if os.path.isfile(self.args.filepath):
+			print("Reading Json File...")
 			with open(self.args.filepath) as f:
 				for lines in f:
 					json_raw_data += lines
@@ -23,57 +25,66 @@ class tmcJsonParser:
 			for rows in parsed_json.rows:
 				eventData = rows['doc']['eventData']
 				splited_data = eventData.split(',')
-				tmp_k = {}
-				tmp_m = {}
+				if(splited_data[0] == "NATIVE_KEY_TYPED" or splited_data[0] == "NATIVE_KEY_PRESSED" or splited_data[0] == "NATIVE_KEY_RELEASED"):
+					eventData = eventData.replace("'\r'","'\\r'")
+					eventData = eventData.replace("\"", '\\"')
+					splited_data = eventData.split(',')
+				tmp_k = {'event':'', 'keyCode':'', 'keyText':'', 'keyChar':'','modifiers':'', 'keyLocation':'', 'rawCode':'', 'timeStamp':'','activeWindow':''}
+				tmp_m = {'event':'', 'position':'', 'button':'','modifiers':'', 'clickCount':'', 'scrollType':'','scrollAmount':'', 'wheelRotation':'', 'wheelDirection':''}
 				events = None
 				for data in splited_data:
 					event = splited_data[0]
 					if(event == "NATIVE_KEY_TYPED" or event == "NATIVE_KEY_PRESSED" or event == "NATIVE_KEY_RELEASED"):
 						events = 'k'
-						tmp_k["modifiers"] = ""
-						tmp_k["event"] = event
+						tmp_k["event"] = splited_data[0]
 						if(data.find("=", 0) !=  -1):
 							key_Val = data.split("=")
 							tmp_k[key_Val[0]] = key_Val[1].replace("'", "")
-
-					if (event == "NATIVE_MOUSE_MOVED" or event == "NATIVE_MOUSE_DRAGGED" or event == "NATIVE_MOUSE_CLICKED" or event=="NATIVE_MOUSE_WHEEL" or event=="NATIVE_MOUSE_RELEASED" or event=="NATIVE_MOUSE_PRESSED"):
+					else:
+					#if (event == "NATIVE_MOUSE_MOVED" or event == "NATIVE_MOUSE_DRAGGED" or event == "NATIVE_MOUSE_CLICKED" or event=="NATIVE_MOUSE_WHEEL" or event=="NATIVE_MOUSE_RELEASED" or event=="NATIVE_MOUSE_PRESSED"):
 						events = 'm'
-						tmp_m["modifiers"] = ""
 						tmp_m["event"] = splited_data[0]
-						tmp_m["position"] = str(splited_data[1])+ ", " + str(splited_data [2])
-						tmp_m["scrollAmount"] = ""
-						tmp_m["scrollType"] = ""
-						tmp_m["wheelRotation"] = ""
-						tmp_m["wheelDirection"] = ""
+						tmp_m["position"] = str(splited_data[1])+ "/ " + str(splited_data [2])
 						if(data.find("=", 0)!= -1):
 							key_Val = data.split("=")
-							tmp_m[key_Val[0]] = key_Val[1].replace("'", "")
+							tmp_m[key_Val[0]] = key_Val[1].replace("'", "")		
 				if events == 'k':
 					tmp_k["timeStamp"] = str(rows['doc']['timeStamp']) # pussing in str as we need to join later
 					tmp_k["activeWindow"] = rows['doc']['activeWindow']
 				if events == 'm':
 					tmp_m["timeStamp"] = str(rows['doc']['timeStamp']) # pussing in str as we need to join later
 					tmp_m["activeWindow"] = rows['doc']['activeWindow']
-					events = None
-				if(len(tmp_k)>0):
+				if events == 'k':
 					KEYBOARD_DATA.append(self.getValuesFromJSONRows(tmp_k))
-				if(len(tmp_m)>0):
+				if events == 'm':
 					MOUSE_DATA.append(self.getValuesFromJSONRows(tmp_m))
 				tmp_k = {}
 				tmp_m = {}
+				events = ''
+			print("Finished Read Operation..")
+			print("Writing Data to - "+self.args.destination+"...")
+			if self.args.CsvDataType == "A" or self.args.CsvDataType == "K":
+				KEYBOARD_DATA = ["Event,Key Code, Key Text, key Character,Modifiers, Key Location,Raw Code, Time Stamp,Active Window"] + KEYBOARD_DATA
+			if self.args.CsvDataType == "A" or self.args.CsvDataType == "M":
+				MOUSE_DATA = ["Event, Screen Location, Button, Modifiers, Click Count, Scroll Type, Scroll Amount, Wheel Rotation, Wheel Direction, Time Stamp, Active Window"] + MOUSE_DATA
 			file = open(self.args.destination, "w")
-			for lines in KEYBOARD_DATA:
-				file.write(lines+"\n")
-#			for lines in MOUSE_DATA:
-#				file.write(lines+"\n")
+			if self.args.CsvDataType == "A" or self.args.CsvDataType == "K":
+				print("Key event")
+				for lines in KEYBOARD_DATA:
+					file.write(lines+"\n")
+			if self.args.CsvDataType == "A" or self.args.CsvDataType == "M":
+				print("Mouse event")
+				for lines in MOUSE_DATA:
+					file.write(lines+"\n")
+			print("Finished writing data to "+self.args.destination+".")
 		else:
 			print("Failed to Open source File.")
 
 	def argumentParser(self):
 		parser = agp.ArgumentParser()
-		parser.add_argument("filepath", type=str,
+		parser.add_argument("-filepath", type=str,
 		                    help="json file fetch to convert to")
-		parser.add_argument("-extract", "--Csv Data Type", type=str,
+		parser.add_argument("-extract", "--CsvDataType", type=str,
 		                    help="Data Type to convert to CSV (M = Mouse, K = Keystroke, A = Application Uses, ALL = Everything")
 		parser.add_argument("-sep", "--Seperator", type=str,
 		                    help="Location to save converted csv file")
