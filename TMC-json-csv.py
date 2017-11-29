@@ -7,7 +7,6 @@ class tmcJsonParser:
 
 	def getValuesFromJSONRows(self, data):
 		string_vals = ','.join(data.values())
-		print(string_vals)
 		return string_vals
 
 	def __init__(self):
@@ -24,13 +23,14 @@ class tmcJsonParser:
 			KEYBOARD_DATA = []
 			for rows in parsed_json.rows:
 				eventData = rows['doc']['eventData']
+				userId = rows['doc']['userID']
 				splited_data = eventData.split(',')
 				if(splited_data[0] == "NATIVE_KEY_TYPED" or splited_data[0] == "NATIVE_KEY_PRESSED" or splited_data[0] == "NATIVE_KEY_RELEASED"):
 					eventData = eventData.replace("'\r'","'\\r'")
 					eventData = eventData.replace("\"", '\\"')
 					splited_data = eventData.split(',')
-				tmp_k = {'event':'', 'keyCode':'', 'keyText':'', 'keyChar':'','modifiers':'', 'keyLocation':'', 'rawCode':'', 'timeStamp':'','activeWindow':''}
-				tmp_m = {'event':'', 'position':'', 'button':'','modifiers':'', 'clickCount':'', 'scrollType':'','scrollAmount':'', 'wheelRotation':'', 'wheelDirection':''}
+				tmp_k = {'userId':userId, 'event':'', 'keyCode':'', 'keyText':'', 'keyChar':'','modifiers':'', 'keyLocation':'', 'rawCode':'', 'timeStamp':'','activeWindow':''}
+				tmp_m = {'userId':userId,'event':'', 'position':'', 'button':'','modifiers':'', 'clickCount':'', 'scrollType':'','scrollAmount':'', 'wheelRotation':'', 'wheelDirection':''}
 				events = None
 				for data in splited_data:
 					event = splited_data[0]
@@ -64,16 +64,14 @@ class tmcJsonParser:
 			print("Finished Read Operation..")
 			print("Writing Data to - "+self.args.destination+"...")
 			if self.args.CsvDataType == "A" or self.args.CsvDataType == "K":
-				KEYBOARD_DATA = ["Event,Key Code, Key Text, key Character,Modifiers, Key Location,Raw Code, Time Stamp,Active Window"] + KEYBOARD_DATA
+				KEYBOARD_DATA = ["UserId, Event,Key Code, Key Text, key Character,Modifiers, Key Location,Raw Code, Time Stamp,Active Window"] + KEYBOARD_DATA
 			if self.args.CsvDataType == "A" or self.args.CsvDataType == "M":
-				MOUSE_DATA = ["Event, Screen Location, Button, Modifiers, Click Count, Scroll Type, Scroll Amount, Wheel Rotation, Wheel Direction, Time Stamp, Active Window"] + MOUSE_DATA
+				MOUSE_DATA = ["UserId, Event, Screen Location, Button, Modifiers, Click Count, Scroll Type, Scroll Amount, Wheel Rotation, Wheel Direction, Time Stamp, Active Window"] + MOUSE_DATA
 			file = open(self.args.destination, "w")
 			if self.args.CsvDataType == "A" or self.args.CsvDataType == "K":
-				print("Key event")
 				for lines in KEYBOARD_DATA:
 					file.write(lines+"\n")
 			if self.args.CsvDataType == "A" or self.args.CsvDataType == "M":
-				print("Mouse event")
 				for lines in MOUSE_DATA:
 					file.write(lines+"\n")
 			print("Finished writing data to "+self.args.destination+".")
