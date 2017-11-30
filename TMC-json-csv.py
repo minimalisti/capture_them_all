@@ -2,6 +2,7 @@ import argparse as agp
 import pandas as pd
 import os
 
+#Example usage python TMC-json-csv.py -filepath db.json -extract 'K' -sep ';' -dest ./data.csv
 class tmcJsonParser:
 	args = ""
 
