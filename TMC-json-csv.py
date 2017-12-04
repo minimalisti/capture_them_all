@@ -52,9 +52,11 @@ class tmcJsonParser:
 				if events == 'k':
 					tmp_k["timeStamp"] = str(rows['doc']['timeStamp']) # pussing in str as we need to join later
 					tmp_k["activeWindow"] = rows['doc']['activeWindow']
+					tmp_k["activeWindow"].replace(",", ":")
 				if events == 'm':
 					tmp_m["timeStamp"] = str(rows['doc']['timeStamp']) # pussing in str as we need to join later
 					tmp_m["activeWindow"] = rows['doc']['activeWindow']
+					tmp_k["activeWindow"].replace(",", ":")
 				if events == 'k':
 					KEYBOARD_DATA.append(self.getValuesFromJSONRows(tmp_k))
 				if events == 'm':
